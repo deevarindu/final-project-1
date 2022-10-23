@@ -3,10 +3,13 @@ definitions:
   models.Todo:
     properties:
       id:
+        example: 1
         type: integer
       status:
+        example: done
         type: string
       title:
+        example: do final project
         type: string
     type: object
   params.TodoCreateRequest:
@@ -18,10 +21,15 @@ definitions:
     required:
     - title
     type: object
-  views.ResponseTodo:
+  params.TodoDeleteRequest:
     properties:
       id:
         type: integer
+    required:
+    - id
+    type: object
+  params.TodoUpdateRequest:
+    properties:
       status:
         type: string
       title:
@@ -49,7 +57,9 @@ paths:
           description: OK
           schema:
             items:
-              $ref: '#/definitions/views.ResponseTodo'
+              items:
+                $ref: '#/definitions/models.Todo'
+              type: array
             type: array
       summary: Get all todos
       tags:
@@ -75,6 +85,69 @@ paths:
               $ref: '#/definitions/models.Todo'
             type: array
       summary: Create new todo
+      tags:
+      - todos
+  /todos/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete todo
+      parameters:
+      - description: Delete Todo
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/params.TodoDeleteRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Todo'
+            type: array
+      summary: Delete todo
+      tags:
+      - todos
+    get:
+      consumes:
+      - application/json
+      description: Get todo by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Todo'
+            type: array
+      summary: Get todo by id
+      tags:
+      - todos
+    put:
+      consumes:
+      - application/json
+      description: Update todo
+      parameters:
+      - description: Update Todo
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/params.TodoUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Todo'
+            type: array
+      summary: Update todo
       tags:
       - todos
 swagger: "2.0"

@@ -1,7 +1,34 @@
 package views
 
+import (
+	"net/http"
+)
+
 type Response struct {
-	ID     int    `example:"1" json:"id"`
-	Title  string `example:"Mengerjakan final project" json:"title"`
-	Status string `example:"in progress" json:"status"`
+	Status  int         `json:"status"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data"`
+}
+
+func BadRequestResponse(err error) *Response {
+	return &Response{
+		Status:  http.StatusBadRequest,
+		Message: err.Error(),
+	}
+}
+
+func SuccessCreateResponse(payload interface{}, message string) *Response {
+	return &Response{
+		Status:  http.StatusCreated,
+		Message: message,
+		Data:    payload,
+	}
+}
+
+func GetResponse(payload interface{}, message string) *Response {
+	return &Response{
+		Status:  http.StatusOK,
+		Message: message,
+		Data:    payload,
+	}
 }

@@ -21,6 +21,13 @@ func main() {
 	router := mux.NewRouter()
 
 	router.HandleFunc("/ping", controllers.HealthCheck).Methods("GET")
+	router.HandleFunc("/todos", controllers.GetTodos).Methods("GET")
+	router.HandleFunc("/todos", controllers.CreateTodo).Methods("POST")
+	router.HandleFunc("/todos/{id}", controllers.GetTodoById).Methods("GET")
+	router.HandleFunc("/todos/{id}", controllers.UpdateTodo).Methods("PUT")
+	router.HandleFunc("/todos/{id}", controllers.DeleteTodo).Methods("DELETE")
+
+	// router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
 
 	log.Println("Server is running on port 5000")
 	log.Fatal(http.ListenAndServe(":5000", router))

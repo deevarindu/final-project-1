@@ -1,7 +1,7 @@
 package models
 
 type Todo struct {
-	ID     int    `json:"id"`
-	Title  string `json:"title"`
-	Status string `json:"status"`
+	ID     int    `example:"1" json:"id"`
+	Title  string `example:"do final project" json:"title"`
+	Status string `example:"done" json:"status"`
 }

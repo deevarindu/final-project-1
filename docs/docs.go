@@ -39,7 +39,10 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/views.ResponseTodo"
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/models.Todo"
+                                }
                             }
                         }
                     }
@@ -80,6 +83,102 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/todos/{id}": {
+            "get": {
+                "description": "Get todo by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "todos"
+                ],
+                "summary": "Get todo by id",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Todo"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update todo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "todos"
+                ],
+                "summary": "Update todo",
+                "parameters": [
+                    {
+                        "description": "Update Todo",
+                        "name": "todo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/params.TodoUpdateRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Todo"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete todo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "todos"
+                ],
+                "summary": "Delete todo",
+                "parameters": [
+                    {
+                        "description": "Delete Todo",
+                        "name": "todo",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/params.TodoDeleteRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Todo"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -87,13 +186,16 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "id": {
-                    "type": "integer"
+                    "type": "integer",
+                    "example": 1
                 },
                 "status": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "done"
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "do final project"
                 }
             }
         },
@@ -111,12 +213,20 @@ const docTemplate = `{
                 }
             }
         },
-        "views.ResponseTodo": {
+        "params.TodoDeleteRequest": {
             "type": "object",
+            "required": [
+                "id"
+            ],
             "properties": {
                 "id": {
                     "type": "integer"
-                },
+                }
+            }
+        },
+        "params.TodoUpdateRequest": {
+            "type": "object",
+            "properties": {
                 "status": {
                     "type": "string"
                 },
