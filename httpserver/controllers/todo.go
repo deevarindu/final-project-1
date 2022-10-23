@@ -1,10 +1,11 @@
 package controllers
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/deevarindu/final-project-1/httpserver/controllers/params"
+	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 )
 
 // GetTodos godoc
@@ -15,11 +16,9 @@ import (
 // @Produce  json
 // @Success 200 {array} []models.Todo
 // @Router /todos [get]
-func GetTodos(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"message": "ok",
-	})
+func GetTodos(ctx *gin.Context) {
+	ctx.Writer.Header().Set("Content-Type", "application/json")
+
 }
 
 // CreateTodo godoc
@@ -31,19 +30,24 @@ func GetTodos(w http.ResponseWriter, r *http.Request) {
 // @Param todo body params.TodoCreateRequest true "Create Todo"
 // @Success 200 {array} models.Todo
 // @Router /todos [post]
-func CreateTodo(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
+func CreateTodo(ctx *gin.Context) {
+	ctx.Writer.Header().Set("Content-Type", "application/json")
 	var todo params.TodoCreateRequest
-	err := json.NewDecoder(r.Body).Decode(&todo)
+	err := ctx.ShouldBindJSON(&todo)
 	if err != nil {
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"data": todo,
-	})
+
+	err = validator.New().Struct(todo)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 }
 
 // GetTodoById godoc
@@ -54,11 +58,9 @@ func CreateTodo(w http.ResponseWriter, r *http.Request) {
 // @Produce  json
 // @Success 200 {array} models.Todo
 // @Router /todos/{id} [get]
-func GetTodoById(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"message": "ok",
-	})
+func GetTodoById(ctx *gin.Context) {
+	ctx.Writer.Header().Set("Content-Type", "application/json")
+
 }
 
 // UpdateTodo godoc
@@ -70,11 +72,24 @@ func GetTodoById(w http.ResponseWriter, r *http.Request) {
 // @Param todo body params.TodoUpdateRequest true "Update Todo"
 // @Success 200 {array} models.Todo
 // @Router /todos/{id} [put]
-func UpdateTodo(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"message": "ok",
-	})
+func UpdateTodo(ctx *gin.Context) {
+	ctx.Writer.Header().Set("Content-Type", "application/json")
+	var todo params.TodoUpdateRequest
+	err := ctx.ShouldBindJSON(&todo)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	err = validator.New().Struct(todo)
+	if err != nil {
+		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 }
 
 // DeleteTodo godoc
@@ -85,9 +100,6 @@ func UpdateTodo(w http.ResponseWriter, r *http.Request) {
 // @Produce  json
 // @Success 200 {array} models.Todo
 // @Router /todos/{id} [delete]
-func DeleteTodo(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]interface{}{
-		"message": "ok",
-	})
+func DeleteTodo(ctx *gin.Context) {
+	ctx.Writer.Header().Set("Content-Type", "application/json")
 }

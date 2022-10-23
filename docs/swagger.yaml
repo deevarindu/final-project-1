@@ -21,13 +21,6 @@ definitions:
     required:
     - title
     type: object
-  params.TodoDeleteRequest:
-    properties:
-      id:
-        type: integer
-    required:
-    - id
-    type: object
   params.TodoUpdateRequest:
     properties:
       status:
@@ -92,13 +85,6 @@ paths:
       consumes:
       - application/json
       description: Delete todo
-      parameters:
-      - description: Delete Todo
-        in: body
-        name: todo
-        required: true
-        schema:
-          $ref: '#/definitions/params.TodoDeleteRequest'
       produces:
       - application/json
       responses:

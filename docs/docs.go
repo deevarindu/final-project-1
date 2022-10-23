@@ -156,17 +156,6 @@ const docTemplate = `{
                     "todos"
                 ],
                 "summary": "Delete todo",
-                "parameters": [
-                    {
-                        "description": "Delete Todo",
-                        "name": "todo",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/params.TodoDeleteRequest"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -210,17 +199,6 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string"
-                }
-            }
-        },
-        "params.TodoDeleteRequest": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "type": "integer"
                 }
             }
         },

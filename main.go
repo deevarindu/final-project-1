@@ -1,11 +1,10 @@
 package main
 
 import (
-	"log"
-	"net/http"
+	"fmt"
 
-	"github.com/deevarindu/final-project-1/httpserver/controllers"
-	"github.com/gorilla/mux"
+	"github.com/deevarindu/final-project-1/config"
+	"github.com/deevarindu/final-project-1/routes"
 )
 
 // @title Final Project 1 Todos API Documentation
@@ -18,17 +17,15 @@ import (
 // @BasePath /
 
 func main() {
-	router := mux.NewRouter()
+	db, err := config.CreateConnection()
+	if err != nil {
+		panic(err)
+	}
 
-	router.HandleFunc("/ping", controllers.HealthCheck).Methods("GET")
-	router.HandleFunc("/todos", controllers.GetTodos).Methods("GET")
-	router.HandleFunc("/todos", controllers.CreateTodo).Methods("POST")
-	router.HandleFunc("/todos/{id}", controllers.GetTodoById).Methods("GET")
-	router.HandleFunc("/todos/{id}", controllers.UpdateTodo).Methods("PUT")
-	router.HandleFunc("/todos/{id}", controllers.DeleteTodo).Methods("DELETE")
+	if db != nil {
+		fmt.Println("Connected to database")
+	}
 
-	// router.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
-
-	log.Println("Server is running on port 5000")
-	log.Fatal(http.ListenAndServe(":5000", router))
+	app := routes.RegisterRoutes()
+	app.Run(":5000")
 }
