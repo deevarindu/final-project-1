@@ -1,0 +1,80 @@
+basePath: /
+definitions:
+  models.Todo:
+    properties:
+      id:
+        type: integer
+      status:
+        type: string
+      title:
+        type: string
+    type: object
+  params.TodoCreateRequest:
+    properties:
+      status:
+        type: string
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  views.ResponseTodo:
+    properties:
+      id:
+        type: integer
+      status:
+        type: string
+      title:
+        type: string
+    type: object
+host: localhost:5000
+info:
+  contact:
+    email: deevarindu@gmail.com
+    name: Deeva Rindu
+  description: This is the simple documentation for the Final Project 1 Todos API.
+  termsOfService: http://swagger.io/terms/
+  title: Final Project 1 Todos API Documentation
+  version: "1.0"
+paths:
+  /todos:
+    get:
+      consumes:
+      - application/json
+      description: Get all todos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/views.ResponseTodo'
+            type: array
+      summary: Get all todos
+      tags:
+      - todos
+    post:
+      consumes:
+      - application/json
+      description: Create new todo
+      parameters:
+      - description: Create Todo
+        in: body
+        name: todo
+        required: true
+        schema:
+          $ref: '#/definitions/params.TodoCreateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Todo'
+            type: array
+      summary: Create new todo
+      tags:
+      - todos
+swagger: "2.0"
