@@ -17,7 +17,21 @@ func BadRequestResponse(err error) *Response {
 	}
 }
 
-func SuccessCreateResponse(payload interface{}, message string) *Response {
+func InternalServerError(err error) *Response {
+	return &Response{
+		Status:  http.StatusInternalServerError,
+		Message: err.Error(),
+	}
+}
+
+func DataConflictResponse(err error) *Response {
+	return &Response{
+		Status:  http.StatusConflict,
+		Message: err.Error(),
+	}
+}
+
+func SuccessResponse(payload interface{}, message string) *Response {
 	return &Response{
 		Status:  http.StatusCreated,
 		Message: message,
@@ -25,10 +39,9 @@ func SuccessCreateResponse(payload interface{}, message string) *Response {
 	}
 }
 
-func GetResponse(payload interface{}, message string) *Response {
+func SuccessDeleteResponse(message string) *Response {
 	return &Response{
-		Status:  http.StatusOK,
+		Status:  http.StatusCreated,
 		Message: message,
-		Data:    payload,
 	}
 }

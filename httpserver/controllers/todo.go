@@ -4,9 +4,20 @@ import (
 	"net/http"
 
 	"github.com/deevarindu/final-project-1/httpserver/controllers/params"
+	"github.com/deevarindu/final-project-1/httpserver/services"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 )
+
+type TodoController struct {
+	svc *services.TodoSvc
+}
+
+func NewTodoController(svc *services.TodoSvc) *TodoController {
+	return &TodoController{
+		svc: svc,
+	}
+}
 
 // GetTodos godoc
 // @Summary Get all todos
@@ -16,9 +27,10 @@ import (
 // @Produce  json
 // @Success 200 {array} []models.Todo
 // @Router /todos [get]
-func GetTodos(ctx *gin.Context) {
+func (t *TodoController) GetTodos(ctx *gin.Context) {
 	ctx.Writer.Header().Set("Content-Type", "application/json")
-
+	response := t.svc.GetTodos()
+	WriteJsonResponse(ctx, response)
 }
 
 // CreateTodo godoc
@@ -28,9 +40,9 @@ func GetTodos(ctx *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Param todo body params.TodoCreateRequest true "Create Todo"
-// @Success 200 {array} models.Todo
+// @Success 201 {array} models.Todo
 // @Router /todos [post]
-func CreateTodo(ctx *gin.Context) {
+func (t *TodoController) CreateTodo(ctx *gin.Context) {
 	ctx.Writer.Header().Set("Content-Type", "application/json")
 	var todo params.TodoCreateRequest
 	err := ctx.ShouldBindJSON(&todo)
@@ -48,6 +60,9 @@ func CreateTodo(ctx *gin.Context) {
 		})
 		return
 	}
+
+	response := t.svc.CreateTodo(&todo)
+	WriteJsonResponse(ctx, response)
 }
 
 // GetTodoById godoc
@@ -58,9 +73,11 @@ func CreateTodo(ctx *gin.Context) {
 // @Produce  json
 // @Success 200 {array} models.Todo
 // @Router /todos/{id} [get]
-func GetTodoById(ctx *gin.Context) {
+func (t *TodoController) GetTodoById(ctx *gin.Context) {
 	ctx.Writer.Header().Set("Content-Type", "application/json")
-
+	id := ctx.Param("id")
+	response := t.svc.GetTodoById(id)
+	WriteJsonResponse(ctx, response)
 }
 
 // UpdateTodo godoc
@@ -72,7 +89,7 @@ func GetTodoById(ctx *gin.Context) {
 // @Param todo body params.TodoUpdateRequest true "Update Todo"
 // @Success 200 {array} models.Todo
 // @Router /todos/{id} [put]
-func UpdateTodo(ctx *gin.Context) {
+func (t *TodoController) UpdateTodo(ctx *gin.Context) {
 	ctx.Writer.Header().Set("Content-Type", "application/json")
 	var todo params.TodoUpdateRequest
 	err := ctx.ShouldBindJSON(&todo)
@@ -90,6 +107,9 @@ func UpdateTodo(ctx *gin.Context) {
 		})
 		return
 	}
+
+	response := t.svc.UpdateTodo(&todo)
+	WriteJsonResponse(ctx, response)
 }
 
 // DeleteTodo godoc
@@ -100,6 +120,9 @@ func UpdateTodo(ctx *gin.Context) {
 // @Produce  json
 // @Success 200 {array} models.Todo
 // @Router /todos/{id} [delete]
-func DeleteTodo(ctx *gin.Context) {
+func (t *TodoController) DeleteTodo(ctx *gin.Context) {
 	ctx.Writer.Header().Set("Content-Type", "application/json")
+	id := ctx.Param("id")
+	response := t.svc.DeleteTodo(id)
+	WriteJsonResponse(ctx, response)
 }

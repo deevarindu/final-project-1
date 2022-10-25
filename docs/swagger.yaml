@@ -3,8 +3,8 @@ definitions:
   models.Todo:
     properties:
       id:
-        example: 1
-        type: integer
+        example: "1"
+        type: string
       status:
         example: done
         type: string
@@ -71,8 +71,8 @@ paths:
       produces:
       - application/json
       responses:
-        "200":
-          description: OK
+        "201":
+          description: Created
           schema:
             items:
               $ref: '#/definitions/models.Todo'

@@ -1,10 +1,12 @@
 package main
 
 import (
-	"fmt"
-
 	"github.com/deevarindu/final-project-1/config"
+	"github.com/deevarindu/final-project-1/httpserver/controllers"
+	"github.com/deevarindu/final-project-1/httpserver/repositories/postgres"
+	"github.com/deevarindu/final-project-1/httpserver/services"
 	"github.com/deevarindu/final-project-1/routes"
+	"github.com/gin-gonic/gin"
 )
 
 // @title Final Project 1 Todos API Documentation
@@ -22,10 +24,12 @@ func main() {
 		panic(err)
 	}
 
-	if db != nil {
-		fmt.Println("Connected to database")
-	}
+	todoRepository := postgres.NewTodoRepository(db)
+	todoSvc := services.NewTodoSvc(todoRepository)
+	todoHandler := controllers.NewTodoController(todoSvc)
 
-	app := routes.RegisterRoutes()
-	app.Run(":5000")
+	router := gin.Default()
+
+	app := routes.NewRouter(router, todoHandler)
+	app.Start(":5000")
 }
