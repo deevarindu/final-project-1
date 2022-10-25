@@ -55,7 +55,7 @@ func (t *TodoSvc) CreateTodo(req *params.TodoCreateRequest) *views.Response {
 		}
 		return views.InternalServerError(err)
 	}
-	return views.SuccessResponse(todo, "Create todo successfully")
+	return views.SuccessCreateResponse(todo, "Create todo successfully")
 }
 
 func ParseTodoCreateRequest(todo *params.TodoCreateRequest) *models.Todo {

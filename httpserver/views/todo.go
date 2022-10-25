@@ -31,7 +31,7 @@ func DataConflictResponse(err error) *Response {
 	}
 }
 
-func SuccessResponse(payload interface{}, message string) *Response {
+func SuccessCreateResponse(payload interface{}, message string) *Response {
 	return &Response{
 		Status:  http.StatusCreated,
 		Message: message,
@@ -39,9 +39,17 @@ func SuccessResponse(payload interface{}, message string) *Response {
 	}
 }
 
+func SuccessResponse(payload interface{}, message string) *Response {
+	return &Response{
+		Status:  http.StatusOK,
+		Message: message,
+		Data:    payload,
+	}
+}
+
 func SuccessDeleteResponse(message string) *Response {
 	return &Response{
-		Status:  http.StatusCreated,
+		Status:  http.StatusOK,
 		Message: message,
 	}
 }
